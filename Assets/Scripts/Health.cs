@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Health : MonoBehaviour
 {
@@ -6,9 +7,18 @@ public class Health : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
     
+    [Header("Visual Feedback")]
+    public float flashDuration = 1.0f;     // 1 sekund - mye lengre
+    public Color flashColor = Color.yellow; // Gul i stedet for rød - mer kontrast
+    
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+    
     void Start()
     {
         currentHealth = maxHealth;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
     }
     
     public void TakeDamage(float damage)
@@ -16,22 +26,35 @@ public class Health : MonoBehaviour
         currentHealth -= damage;
         Debug.Log(gameObject.name + " took " + damage + " damage. Health: " + currentHealth);
         
+        StartCoroutine(FlashEffect());
+        
         if (currentHealth <= 0)
         {
             Die();
         }
     }
     
+    IEnumerator FlashEffect()
+    {
+        Debug.Log("Flash effect started!");
+        
+        spriteRenderer.color = flashColor;
+        Debug.Log("Color changed to: " + flashColor);
+        
+        yield return new WaitForSeconds(flashDuration);
+        
+        spriteRenderer.color = originalColor;
+        Debug.Log("Color changed back to original");
+    }
+    
     void Die()
     {
         Debug.Log(gameObject.name + " died!");
         
-        // If it's an enemy, destroy it
         if (gameObject.name.Contains("Enemy"))
         {
             Destroy(gameObject);
         }
-        // If it's player, we can add game over logic later
     }
     
     public bool IsAlive()
