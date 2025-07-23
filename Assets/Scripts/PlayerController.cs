@@ -6,6 +6,10 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     
+    [Header("Combat Settings")]
+    public float attackDamage = 25f;
+    public float attackRange = 1.5f;
+    
     private Rigidbody2D rb;
     private Vector2 movement;
     
@@ -16,18 +20,48 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        // Get input using new Input System
+        HandleMovement();
+        HandleCombat();
+    }
+    
+    void HandleMovement()
+    {
         movement = Vector2.zero;
         
         if (Keyboard.current.wKey.isPressed) movement.y = 1;
         if (Keyboard.current.sKey.isPressed) movement.y = -1;
         if (Keyboard.current.aKey.isPressed) movement.x = -1;
         if (Keyboard.current.dKey.isPressed) movement.x = 1;
-        
-        // Debug
-        if (movement != Vector2.zero)
+    }
+    
+    void HandleCombat()
+    {
+        // Attack on left mouse click
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Debug.Log("Movement: " + movement);
+            Attack();
+        }
+    }
+    
+    void Attack()
+    {
+        // Find all enemies within attack range
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        
+        foreach (GameObject enemy in enemies)
+        {
+            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+            
+            if (distance <= attackRange)
+            {
+                // Deal damage to the enemy
+                Health enemyHealth = enemy.GetComponent<Health>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(attackDamage);
+                    Debug.Log("Player attacked " + enemy.name + "!");
+                }
+            }
         }
     }
     
