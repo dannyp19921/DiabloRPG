@@ -50,10 +50,17 @@ public class Health : MonoBehaviour
     void Die()
     {
         Debug.Log(gameObject.name + " died!");
-        
+    
         if (gameObject.name.Contains("Enemy"))
         {
             Destroy(gameObject);
+        }
+        else if (gameObject.CompareTag("Player"))
+        {
+            // Player died - Game Over
+            Debug.Log("GAME OVER!");
+            Time.timeScale = 0f; // Pause the game
+            // We can add proper Game Over UI later
         }
     }
     
