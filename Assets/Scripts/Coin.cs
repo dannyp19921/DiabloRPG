@@ -8,6 +8,12 @@ public class Coin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // Add coins to GameManager
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.AddCoins(value);
+            }
+            
             Debug.Log("Player collected " + value + " coins!");
             Destroy(gameObject);
         }
