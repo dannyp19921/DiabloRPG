@@ -53,16 +53,15 @@ public class Health : MonoBehaviour
     
         if (gameObject.name.Contains("Enemy"))
         {
-            // Drop a coin before destroying enemy 
-            DropLoot(); 
+            // Tell spawner an enemy died
+            EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+            if (spawner != null)
+            {
+                spawner.EnemyDied();
+            }
+        
+            DropLoot();
             Destroy(gameObject);
-        }
-        else if (gameObject.CompareTag("Player"))
-        {
-            // Player died - Game Over
-            Debug.Log("GAME OVER!");
-            Time.timeScale = 0f; // Pause the game
-            // We can add proper Game Over UI later
         }
     }
 
