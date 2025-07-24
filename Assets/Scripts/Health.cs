@@ -53,6 +53,8 @@ public class Health : MonoBehaviour
     
         if (gameObject.name.Contains("Enemy"))
         {
+            // Drop a coin before destroying enemy 
+            DropLoot(); 
             Destroy(gameObject);
         }
         else if (gameObject.CompareTag("Player"))
@@ -61,6 +63,16 @@ public class Health : MonoBehaviour
             Debug.Log("GAME OVER!");
             Time.timeScale = 0f; // Pause the game
             // We can add proper Game Over UI later
+        }
+    }
+
+    void DropLoot()
+    {
+        // Load prefab from Assets folder
+        GameObject coinPrefab = Resources.Load<GameObject>("Coin");
+        if (coinPrefab != null)
+        {
+            Instantiate(coinPrefab, transform.position, Quaternion.identity);
         }
     }
     

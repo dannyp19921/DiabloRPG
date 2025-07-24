@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     
     [Header("Combat Settings")]
     public float attackDamage = 25f;
-    public float attackRange = 1.5f;
+    public float attackRange = 3f;
     
     private Rigidbody2D rb;
     private Vector2 movement;
